@@ -6,6 +6,7 @@ import { db } from "../firebase/Firebase";
 function Profile() {
   const { user } = useContext(context);
   const [friends, setFriends] = useState([]);
+  const [username, setusername] = useState("");
   const [loading, setLoading] = useState(true);
 
   // Fetch user's friends from Firestore
@@ -15,6 +16,7 @@ function Profile() {
         if (!user?.uid) return;
         const userDoc = await getDoc(doc(db, "users", user.uid));
         setFriends(userDoc.data()?.friends || []);
+        setusername(userDoc.data()?.name || "");
       } catch (err) {
         console.error("Error fetching friends:", err);
       } finally {
@@ -35,7 +37,7 @@ function Profile() {
             alt="Profile"
             className="w-24 h-24 rounded-full mx-auto mb-4"
           />
-          <h2 className="text-lg font-semibold text-gray-700">{user?.name || "User Name"}</h2>
+          <h2 className="text-lg font-semibold text-gray-700">{username || "User Name"}</h2>
           <p className="text-gray-600">{user?.email || "User Email"}</p>
         </div>
 
